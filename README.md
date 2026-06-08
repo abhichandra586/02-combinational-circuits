@@ -1,4 +1,3 @@
-```markdown
 # 02 — Combinational Circuits in Verilog
 
 > **VLSI Design Portfolio · Step 2 of 8**
@@ -331,4 +330,3 @@ Building a complete VLSI design portfolio from logic gates to a pipelined proces
 ---
 
 *Part of an 8-repository VLSI learning roadmap — from AND gate to 16-bit pipelined RISC processor.*
-```
