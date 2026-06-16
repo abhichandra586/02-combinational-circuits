@@ -154,52 +154,107 @@ Each circuit is implemented using **continuous assignment (`assign`)** and struc
 
 ### How to simulate any circuit
 
-Replace `addsub_16bit` with the circuit name you want to simulate.
-
 **Step 1 — Compile**
 ```bash
-iverilog -o addsub_16bit_sim src/addsub_16bit.v tb/addsub_16bit_tb.v
+iverilog -o half_adder_sim half_adder.v half_adder_tb.v
 ```
 
 **Step 2 — Run simulation**
 ```bash
-vvp addsub_16bit_sim
+vvp half_adder_sim
 ```
 
 **Step 3 — View waveform**
 ```bash
-gtkwave addsub_16bit.vcd
+gtkwave half_adder.vcd
 ```
 
 ### Quick reference — all circuits
 
 ```bash
 # Half Adder
-iverilog -o half_adder_sim src/half_adder.v tb/half_adder_tb.v && vvp half_adder_sim
+iverilog -o half_adder_sim half_adder.v half_adder_tb.v
+vvp half_adder_sim
+
+# Half Subtractor
+iverilog -o half_sub_sim half_sub.v half_sub_tb.v
+vvp half_sub_sim
 
 # Full Adder
-iverilog -o full_adder_sim src/full_adder.v tb/full_adder_tb.v && vvp full_adder_sim
+iverilog -o full_adder_sim full_adder.v full_adder_tb.v
+vvp full_adder_sim
+
+# Full Subtractor
+iverilog -o full_sub_sim full_sub.v full_sub_tb.v
+vvp full_sub_sim
+
+# 2:1 MUX
+iverilog -o mux2to1_sim mux2to1.v mux2to1_tb.v
+vvp mux2to1_sim
+
+# 4:1 MUX
+iverilog -o mux4to1_sim mux4to1.v mux4to1_tb.v
+vvp mux4to1_sim
+
+# 2-bit RCA
+iverilog -o rca_2bit_sim full_adder.v rca_2bit.v rca_2bit_tb.v
+vvp rca_2bit_sim
+
+# 4-bit RCA
+iverilog -o rca_4bit_sim full_adder.v rca_4bit.v rca_4bit_tb.v
+vvp rca_4bit_sim
+
+# 16-bit RCA
+iverilog -o rca_16bit_sim full_adder.v rca_16bit.v rca_16bit_tb.v
+vvp rca_16bit_sim
+
+# 4-bit Adder-Subtractor
+iverilog -o addsub_4bit_sim full_adder.v addsub_4bit.v addsub_4bit_tb.v
+vvp addsub_4bit_sim
 
 # 16-bit Adder-Subtractor
-iverilog -o addsub_16bit_sim src/addsub_16bit.v tb/addsub_16bit_tb.v && vvp addsub_16bit_sim
+iverilog -o addsub_16bit_sim full_adder.v addsub_16bit.v addsub_16bit_tb.v
+vvp addsub_16bit_sim
 
 # 16-bit ALU
-iverilog -o alu_16bit_sim src/alu_16bit.v tb/alu_16bit_tb.v && vvp alu_16bit_sim
+iverilog -o alu_16bit_sim half_adder.v full_adder.v addsub_16bit.v alu_16bit.v alu_16bit_tb.v
+vvp alu_16bit_sim
 
 # 16-bit Comparator
-iverilog -o comparator_16bit_sim src/comparator_16bit.v tb/comparator_16bit_tb.v && vvp comparator_16bit_sim
+iverilog -o comparator_16bit_sim comparator_16bit.v comparator_16bit_tb.v
+vvp comparator_16bit_sim
+
+# 3:8 Decoder
+iverilog -o decoder3to8_sim decoder3to8.v decoder3to8_tb.v
+vvp decoder3to8_sim
+
+# 8:3 Encoder
+iverilog -o encoder8to3_sim encoder8to3.v encoder8to3_tb.v
+vvp encoder8to3_sim
+
+# 4:2 Priority Encoder
+iverilog -o pr_encoder4to2_sim pr_encoder4to2.v pr_encoder4to2_tb.v
+vvp pr_encoder4to2_sim
+
+# 8:3 Priority Encoder
+iverilog -o pr_encoder8to3_sim pr_encoder8to3.v pr_encoder8to3_tb.v
+vvp pr_encoder8to3_sim
+
+# View waveform
+gtkwave module.vcd
 ```
 
 ### Expected simulation output
 
-Each testbench applies all relevant input combinations (including edge cases like overflow, underflow, maximum values) and displays results on the terminal.
+Each testbench applies all relevant input combinations including edge cases and displays results on the terminal.
 
-**Example (16-bit Adder-Subtractor):**
+**Example — 16-bit Adder-Subtractor:**
 ```
+VCD info: dumpfile addsub_16bit.vcd opened for output.
 Time=0,m=0,a=7,b=3,result=10
 Time=10000,m=1,a=2,b=1,result=1
-...
 Time=50000,m=0,a=65535,b=1,result=65536
+addsub_16bit_tb.v: $finish called at 120000 (1ps)
 ```
 
 ---
@@ -305,12 +360,13 @@ All modules verified via gate-level simulation using iverilog.
 
 **Step 1 — Synthesize**
 ```bash
-yosys -p "read_verilog src/half_adder.v src/full_adder.v src/addsub_16bit.v src/alu_16bit.v; hierarchy -check -top alu_16bit; proc; opt; write_verilog -noattr netlist/alu_netlist.v"
+yosys synth.ys
+vvp alu_gls_sim
 ```
 
 **Step 2 — Run Gate-Level Simulation**
 ```bash
-iverilog -o alu_gls_sim netlist/alu_netlist.v tb/alu_16bit_tb.v
+iverilog -o alu_gls_sim alu_netlist.v alu_16bit_tb.v
 vvp alu_gls_sim
 ```
 
@@ -342,14 +398,14 @@ vvp alu_gls_sim
 
 ## Tools Used
 
-| Tool            | Version     | Purpose                          |
-|-----------------|-------------|----------------------------------|
-| Icarus Verilog  | 0.9.7 / 1.1 | Compilation and simulation       |
-| GTKWave         | 3.3.x       | Waveform viewing and verification|
-| Yosys           | 0.66+4      | Synthesis and netlist generation |
-| Graphviz        | 15.0.0      | Schematic visualization          |
-| VS Code         | Latest      | Code editor                      |
-| Git             | Latest      | Version control                  |
+| Tool | Purpose |
+|------|---------|
+| Icarus Verilog | Compilation and simulation |
+| GTKWave | Waveform viewing and verification |
+| Yosys | Synthesis and netlist generation |
+| Graphviz | Schematic visualization |
+| VS Code | Code editor |
+| Git | Version control |
 
 ---
 
@@ -357,22 +413,22 @@ vvp alu_gls_sim
 
 This repository is **Step 2** in an 8-step roadmap building up to a complete 16-bit pipelined RISC processor.
 
-| Step | Repository                        | Status     |
-|------|-----------------------------------|------------|
-| 1    | `01-basic-logic-gates`            | ✅ Complete |
-| 2    | `02-combinational-circuits`       | ✅ Complete |
-| 3    | `03-sequential-circuits`          | ⏳ Upcoming |
-| 4    | `04-finite-state-machines`        | ⏳ Upcoming |
-| 5    | `05-alu-16bit`                    | ⏳ Upcoming |
-| 6    | `06-processor-components`         | ⏳ Upcoming |
-| 7    | `07-risc16-pipelined-processor`   | ⏳ Upcoming |
-| 8    | `08-protocols-and-interfaces`     | ⏳ Upcoming |
+| Step | Repository | Status |
+|------|------------|--------|
+| 1 | `01-basic-logic-gates` | ✅ Complete |
+| 2 | `02-combinational-circuits` | ✅ Complete |
+| 3 | `03-sequential-circuits` | ✅ Complete |
+| 4 | `04-finite-state-machines` | 🔨 In Progress |
+| 5 | `05-alu-16bit` | ⏳ Upcoming |
+| 6 | `06-processor-components` | ⏳ Upcoming |
+| 7 | `07-risc16-pipelined-processor` | ⏳ Upcoming |
+| 8 | `08-protocols-and-interfaces` | ⏳ Upcoming |
 
 ---
 
 ## Author
 
-**Abhi** — B.Tech ECE, 3rd Year  
+**Abhi Chandra B** — B.Tech ECE, 3rd Year
 Building a complete VLSI design portfolio from logic gates to a pipelined processor.
 
 [![GitHub](https://img.shields.io/badge/GitHub-abhichandra586-181717?style=flat&logo=github)](https://github.com/abhichandra586)
