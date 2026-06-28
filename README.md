@@ -6,7 +6,6 @@
 ---
 
 ## Table of Contents
-
 - [Overview](#overview)
 - [Repository Structure](#repository-structure)
 - [Circuits Implemented](#circuits-implemented)
@@ -21,11 +20,11 @@
 
 ## Overview
 
-This is the second repository in my journey of building a 16-bit pipelined RISC processor from scratch using Verilog HDL.
+This is the **second repository** in my journey of building a **16-bit pipelined RISC processor from scratch** using Verilog HDL.
 
 Every processor datapath is built using combinational circuits. This repository implements all essential combinational blocks — adders, subtractors, multiplexers, decoders, encoders, priority encoders, comparators, ripple carry adders, adder-subtractors, and a complete 16-bit ALU.
 
-Each circuit is implemented using continuous assignment (`assign`) and structural modeling, with its own dedicated Verilog module, testbench, terminal output, and GTKWave waveform for complete verification.
+Each circuit is implemented using **continuous assignment (`assign`)** and structural modeling, with its own dedicated Verilog module, testbench, terminal output, and GTKWave waveform for complete verification.
 
 ---
 
@@ -125,51 +124,47 @@ Each circuit is implemented using continuous assignment (`assign`) and structura
 
 ## Circuits Implemented
 
-| #  | Circuit                  | Description                              | Key Application             |
-|----|--------------------------|------------------------------------------|-----------------------------|
-| 1  | Half Adder               | 1-bit addition (Sum + Carry)             | Building block for adders   |
-| 2  | Half Subtractor          | 1-bit subtraction (Diff + Borrow)        | Building block for subtractors |
-| 3  | Full Adder               | 3-input addition (A, B, Cin)             | Core of multi-bit adders    |
-| 4  | Full Subtractor          | 3-input subtraction (A, B, Bin)          | Core of multi-bit subtractors |
-| 5  | 2:1 MUX                  | 2-to-1 Multiplexer                       | Data selection              |
-| 6  | 4:1 MUX                  | 4-to-1 Multiplexer                       | Data selection              |
-| 7  | 2-bit RCA                | 2-bit Ripple Carry Adder                 | Small multi-bit addition    |
-| 8  | 4-bit RCA                | 4-bit Ripple Carry Adder                 | Standard building block     |
-| 9  | 16-bit RCA               | 16-bit Ripple Carry Adder                | Processor datapath          |
-| 10 | 4-bit Adder-Subtractor   | 4-bit Add/Subtract with mode control     | ALU component               |
-| 11 | 16-bit Adder-Subtractor  | 16-bit Add/Subtract with mode control    | ALU component               |
-| 12 | 16-bit ALU               | 16-bit Arithmetic Logic Unit             | Execute stage of processor  |
-| 13 | 16-bit Comparator        | 16-bit Magnitude Comparator              | Branch condition evaluation |
-| 14 | 3:8 Decoder              | 3-to-8 Line Decoder                      | Address decoding            |
-| 15 | 8:3 Encoder              | 8-to-3 Line Encoder                      | Encoding logic              |
-| 16 | 4:2 Priority Encoder     | 4-to-2 Priority Encoder                  | Priority handling           |
-| 17 | 8:3 Priority Encoder     | 8-to-3 Priority Encoder                  | Priority handling           |
+| #  | Circuit                    | Description                                      | Key Application                          |
+|----|----------------------------|--------------------------------------------------|------------------------------------------|
+| 1  | Half Adder                 | 1-bit addition (Sum + Carry)                     | Building block for adders                |
+| 2  | Half Subtractor            | 1-bit subtraction (Diff + Borrow)                | Building block for subtractors           |
+| 3  | Full Adder                 | 3-input addition (A, B, Cin)                     | Core of multi-bit adders                 |
+| 4  | Full Subtractor            | 3-input subtraction (A, B, Bin)                  | Core of multi-bit subtractors            |
+| 5  | 2:1 MUX                    | 2-to-1 Multiplexer                               | Data selection                           |
+| 6  | 4:1 MUX                    | 4-to-1 Multiplexer                               | Data selection                           |
+| 7  | 2-bit RCA                  | 2-bit Ripple Carry Adder                         | Small multi-bit addition                 |
+| 8  | 4-bit RCA                  | 4-bit Ripple Carry Adder                         | Standard building block                  |
+| 9  | 16-bit RCA                 | 16-bit Ripple Carry Adder                        | Processor datapath                       |
+| 10 | 4-bit Adder-Subtractor     | 4-bit Add/Subtract with mode control             | ALU component                            |
+| 11 | 16-bit Adder-Subtractor    | 16-bit Add/Subtract with mode control            | ALU component                            |
+| 12 | 16-bit ALU                 | 16-bit Arithmetic Logic Unit                     | Execute stage of processor               |
+| 13 | 16-bit Comparator          | 16-bit Magnitude Comparator                      | Branch condition evaluation              |
+| 14 | 3:8 Decoder                | 3-to-8 Line Decoder                              | Address decoding                         |
+| 15 | 8:3 Encoder                | 8-to-3 Line Encoder                              | Encoding logic                           |
+| 16 | 4:2 Priority Encoder       | 4-to-2 Priority Encoder                          | Priority handling                        |
+| 17 | 8:3 Priority Encoder       | 8-to-3 Priority Encoder                          | Priority handling                        |
 
 ---
 
 ## Simulation Instructions
 
 ### Requirements
-
-- **Icarus Verilog** — open-source Verilog simulator
-- **GTKWave** — waveform viewer
+- [Icarus Verilog](http://iverilog.icarus.com/) — open-source Verilog simulator
+- [GTKWave](http://gtkwave.sourceforge.net/) — waveform viewer
 
 ### How to simulate any circuit
 
 **Step 1 — Compile**
-
 ```bash
 iverilog -o half_adder_sim half_adder.v half_adder_tb.v
 ```
 
 **Step 2 — Run simulation**
-
 ```bash
 vvp half_adder_sim
 ```
 
 **Step 3 — View waveform**
-
 ```bash
 gtkwave half_adder.vcd
 ```
@@ -254,7 +249,6 @@ gtkwave module.vcd
 Each testbench applies all relevant input combinations including edge cases and displays results on the terminal.
 
 **Example — 16-bit Adder-Subtractor:**
-
 ```
 VCD info: dumpfile addsub_16bit.vcd opened for output.
 Time=0,m=0,a=7,b=3,result=10
@@ -268,73 +262,109 @@ addsub_16bit_tb.v: $finish called at 120000 (1ps)
 ## Waveforms
 
 ### Half Adder
+![Half Adder Waveform](sim/half_adder_waveform.png)
+![Half Adder Terminal](sim/half_adder_terminal.png)
 
 ### Half Subtractor
+![Half Subtractor Waveform](sim/half_sub_waveform.png)
+![Half Subtractor Terminal](sim/half_sub_terminal.png)
 
 ### Full Adder
+![Full Adder Waveform](sim/full_adder_waveform.png)
+![Full Adder Terminal](sim/full_adder_terminal.png)
 
 ### Full Subtractor
+![Full Subtractor Waveform](sim/full_sub_waveform.png)
+![Full Subtractor Terminal](sim/full_sub_terminal.png)
 
 ### 2:1 MUX
+![2:1 MUX Waveform](sim/mux2to1_waveform.png)
+![2:1 MUX Terminal](sim/mux2to1_terminal.png)
 
 ### 4:1 MUX
+![4:1 MUX Waveform](sim/mux4to1_waveform.png)
+![4:1 MUX Terminal](sim/mux4to1_terminal.png)
 
 ### 2-bit RCA
+![2-bit RCA Waveform](sim/rca_2bit_waveform.png)
+![2-bit RCA Terminal](sim/rca_2bit_terminal.png)
 
 ### 4-bit RCA
+![4-bit RCA Waveform](sim/rca_4bit_waveform.png)
+![4-bit RCA Terminal](sim/rca_4bit_terminal.png)
 
 ### 16-bit RCA
+![16-bit RCA Waveform](sim/rca_16bit_waveform.png)
+![16-bit RCA Terminal](sim/rca_16bit_terminal.png)
 
 ### 4-bit Adder-Subtractor
+![4-bit Adder-Subtractor Waveform](sim/addsub_4bit_waveform.png)
+![4-bit Adder-Subtractor Terminal](sim/addsub_4bit_terminal.png)
 
 ### 16-bit Adder-Subtractor
+![16-bit Adder-Subtractor Waveform](sim/addsub_16bit_waveform.png)
+![16-bit Adder-Subtractor Terminal](sim/addsub_16bit_terminal.png)
 
 ### 16-bit ALU
+![16-bit ALU Waveform](sim/alu_16bit_waveform.png)
+![16-bit ALU Terminal](sim/alu_16bit_terminal.png)
 
 ### 16-bit Comparator
+![16-bit Comparator Waveform](sim/comparator_16bit_waveform.png)
+![16-bit Comparator Terminal](sim/comparator_16bit_terminal.png)
 
 ### 3:8 Decoder
+![3:8 Decoder Waveform](sim/decoder3to8_waveform.png)
+![3:8 Decoder Terminal](sim/decoder3to8_terminal.png)
 
 ### 8:3 Encoder
+![8:3 Encoder Waveform](sim/encoder8to3_waveform.png)
+![8:3 Encoder Terminal](sim/encoder8to3_terminal.png)
 
 ### 4:2 Priority Encoder
+![4:2 Priority Encoder Waveform](sim/pr_encoder4to2_waveform.png)
+![4:2 Priority Encoder Terminal](sim/pr_encoder4to2_terminal.png)
 
 ### 8:3 Priority Encoder
+![8:3 Priority Encoder Waveform](sim/pr_encoder8to3_waveform.png)
+![8:3 Priority Encoder Terminal](sim/pr_encoder8to3_terminal.png)
 
 ---
 
 ## Synthesis & Gate-Level Simulation
 
-Three key modules were synthesized using Yosys open-source synthesis tool, generating gate-level netlists and schematics.
+Three key modules were synthesized using **Yosys** open-source synthesis tool, generating gate-level netlists and schematics.
 
 ### Schematics
 
-**Full Adder — Gate Level**
+#### Full Adder — Gate Level
+![Full Adder Schematic](schematic/fulladder_schematic.png)
 
-**16-bit Adder-Subtractor — Gate Level**
+#### 16-bit Adder-Subtractor — Gate Level
+![Addsub Schematic](schematic/addsub_16bit_schematic.png)
 
-**16-bit ALU — Gate Level**
+#### 16-bit ALU — Gate Level
+![ALU Schematic](schematic/alu_16bit_schematic.png)
 
 ### Gate-Level Simulation Results
 
-All modules verified via gate-level simulation using `iverilog`.
+All modules verified via gate-level simulation using iverilog.
 
-| Module       | GLS Status  |
-|--------------|-------------|
-| full_adder   | ✅ Passed   |
-| addsub_16bit | ✅ Passed   |
-| alu_16bit    | ✅ Passed   |
+| Module | GLS Status |
+|---|---|
+| full_adder | ✅ Passed |
+| addsub_16bit | ✅ Passed |
+| alu_16bit | ✅ Passed |
 
 ### How to Reproduce
 
 **Step 1 — Synthesize**
-
 ```bash
 yosys synth.ys
+vvp alu_gls_sim
 ```
 
 **Step 2 — Run Gate-Level Simulation**
-
 ```bash
 iverilog -o alu_gls_sim alu_netlist.v alu_16bit_tb.v
 vvp alu_gls_sim
@@ -345,7 +375,6 @@ vvp alu_gls_sim
 ## Concepts Covered
 
 ### Verilog
-
 - `module` and `endmodule`
 - `input` / `output` port declarations
 - Continuous assignment (`assign`)
@@ -354,7 +383,6 @@ vvp alu_gls_sim
 - Testbench structure (`$display`, `$monitor`, `$dumpfile`, `$dumpvars`, `$finish`)
 
 ### Digital Design
-
 - Arithmetic circuits and ripple carry propagation
 - Data routing using multiplexers
 - Encoding and decoding logic
@@ -364,38 +392,37 @@ vvp alu_gls_sim
 - Overflow / underflow handling
 
 ### Processor Relevance
-
-These blocks form the foundation of the ALU and datapath in the final RISC processor.
+- These blocks form the foundation of the **ALU** and datapath in the final RISC processor.
 
 ---
 
 ## Tools Used
 
-| Tool           | Purpose                            |
-|----------------|------------------------------------|
-| Icarus Verilog | Compilation and simulation         |
-| GTKWave        | Waveform viewing and verification  |
-| Yosys          | Synthesis and netlist generation   |
-| Graphviz       | Schematic visualization            |
-| VS Code        | Code editor                        |
-| Git            | Version control                    |
+| Tool | Purpose |
+|------|---------|
+| Icarus Verilog | Compilation and simulation |
+| GTKWave | Waveform viewing and verification |
+| Yosys | Synthesis and netlist generation |
+| Graphviz | Schematic visualization |
+| VS Code | Code editor |
+| Git | Version control |
 
 ---
 
 ## What's Next
 
-This repository is Step 2 in an 8-step roadmap building up to a complete 16-bit pipelined RISC processor.
+This repository is **Step 2** in an 8-step roadmap building up to a complete 16-bit pipelined RISC processor.
 
-| Step | Repository                    | Status         |
-|------|-------------------------------|----------------|
-| 1    | 01-basic-logic-gates          | ✅ Complete    |
-| 2    | 02-combinational-circuits     | ✅ Complete    |
-| 3    | 03-sequential-circuits        | ✅ Complete    |
-| 4    | 04-finite-state-machines      | 🔨 In Progress |
-| 5    | 05-alu-16bit                  | ⏳ Upcoming    |
-| 6    | 06-processor-components       | ⏳ Upcoming    |
-| 7    | 07-risc16-pipelined-processor | ⏳ Upcoming    |
-| 8    | 08-protocols-and-interfaces   | ⏳ Upcoming    |
+| Step | Repository | Status |
+|------|------------|--------|
+| 1 | `01-basic-logic-gates` | ✅ Complete |
+| 2 | `02-combinational-circuits` | ✅ Complete |
+| 3 | `03-sequential-circuits` | ✅ Complete |
+| 4 | `04-finite-state-machines` | 🔨 In Progress |
+| 5 | `05-alu-16bit` | ⏳ Upcoming |
+| 6 | `06-processor-components` | ⏳ Upcoming |
+| 7 | `07-risc16-pipelined-processor` | ⏳ Upcoming |
+| 8 | `08-protocols-and-interfaces` | ⏳ Upcoming |
 
 ---
 
@@ -404,4 +431,8 @@ This repository is Step 2 in an 8-step roadmap building up to a complete 16-bit 
 **Abhi Chandra B** — B.Tech ECE, 3rd Year
 Building a complete VLSI design portfolio from logic gates to a pipelined processor.
 
-Part of an 8-repository VLSI learning roadmap — from AND gate to 16-bit pipelined RISC processor.
+[![GitHub](https://img.shields.io/badge/GitHub-abhichandra586-181717?style=flat&logo=github)](https://github.com/abhichandra586)
+
+---
+
+*Part of an 8-repository VLSI learning roadmap — from AND gate to 16-bit pipelined RISC processor.*
